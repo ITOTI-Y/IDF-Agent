@@ -10,7 +10,7 @@ from src.utils.logging import get_logger, setup_logger
 
 app = typer.Typer(
     name="idf-agent",
-    help="IDF Agent - EnergyPlus IDF 文件转换和运行工具",
+    help="IDF Agent - EnergyPlus IDF File Generator and Runner",
     add_completion=False,
 )
 
