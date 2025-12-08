@@ -118,7 +118,7 @@ Guangzhou/广州:
 
 ### Step 2: Calculate Building Geometry
 
-Use the geometry rules from `docs/geometry-rules.md`:
+Use the geometry rules from `./docs/geometry-rules.md`:
 
 1. Calculate building footprint based on total area and number of floors
 2. Subdivide into zones based on complexity level
@@ -127,7 +127,7 @@ Use the geometry rules from `docs/geometry-rules.md`:
 
 ### Step 3: Generate YAML File
 
-Generate YAML following the structure in `docs/yaml-schema-reference.md`:
+Generate YAML following the structure in `./docs/yaml-schema-reference.md`:
 
 ```yaml
 # Required sections in order:
@@ -165,7 +165,7 @@ python main.py schemas/generated_building_XXXXXX.yaml dependencies/Shenzhen.epw
 1. **Pydantic Validation Errors**: Check console output for validation failures
 2. **EnergyPlus Errors**: Check `.err` files in `output/results/energyplus_runs_*/`
 
-Common error patterns and fixes are documented in `docs/error-handling.md`.
+Common error patterns and fixes are documented in `./docs/error-handling.md`.
 
 ### Step 6: Auto-Fix and Retry
 
