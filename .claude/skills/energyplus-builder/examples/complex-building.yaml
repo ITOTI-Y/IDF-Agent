@@ -1,0 +1,1271 @@
+# Complex Building Example
+# 1-floor, 9 zones (perimeter + core pattern)
+# Complexity: complex
+# Location: Shenzhen
+# Floor dimensions: 30m x 24m x 3.5m
+# Perimeter depth: 4.5m
+
+SimulationControl:
+    Do Zone Sizing Calculation: No
+    Do System Sizing Calculation: No
+    Do Plant Sizing Calculation: No
+    Run Simulation for Sizing Periods: No
+    Run Simulation for Weather File Run Periods: Yes
+    Do HVAC Sizing Simulation for Sizing Periods: Yes
+    Maximum Number of HVAC Sizing Simulation Passes: 1
+
+Building:
+    Name: Complex_Office_Building
+    North Axis: 0
+    Terrain: City
+    Loads Convergence Tolerance Value: 0.04
+    Temperature Convergence Tolerance Value: 0.40
+    Solar Distribution: FullInteriorAndExterior
+    Maximum Number of Warmup Days: 25
+    Minimum Number of Warmup Days: 6
+
+Timestep:
+    Number of Timesteps per Hour: 4
+
+Site:Location:
+    Name: Shenzhen_GD_CHN Design_Conditions
+    Latitude: 22.54
+    Longitude: 114.00
+    Time Zone: 8.00
+    Elevation: 4.00
+
+RunPeriod:
+    Name: Run Period 1
+    Begin Month: 1
+    Begin Day of Month: 1
+    Begin Year: 2040
+    End Month: 12
+    End Day of Month: 31
+    End Year: 2040
+    Day of Week for Start Day: Tuesday
+    Use Weather File Holidays and Special Days: Yes
+    Use Weather File Daylight Saving Period: Yes
+    Apply Weekend Holiday Rule: No
+    Use Weather File Rain Indicators: Yes
+    Use Weather File Snow Indicators: Yes
+
+Material:
+  - Name: Concrete_20cm
+    Type: Standard
+    Roughness: MediumRough
+    Thickness: 0.2
+    Conductivity: 1.729
+    Density: 2240
+    Specific_Heat: 837
+
+  - Name: Gypsum_1.3cm
+    Type: Standard
+    Roughness: Smooth
+    Thickness: 0.0127
+    Conductivity: 0.16
+    Density: 785
+    Specific_Heat: 830
+
+  - Name: SimpleGlazingSystem
+    Type: Glazing
+    U-Factor: 5.8
+    Solar_Heat_Gain_Coefficient: 0.8
+    Visible_Transmittance: 0.9
+
+Construction:
+  - Name: Exterior_Wall_Const
+    Layers:
+      - Concrete_20cm
+  - Name: Interior_Wall_Const
+    Layers:
+      - Gypsum_1.3cm
+      - Gypsum_1.3cm
+  - Name: Roof_Const
+    Layers:
+      - Concrete_20cm
+  - Name: Floor_Const
+    Layers:
+      - Concrete_20cm
+  - Name: Window_Const
+    Layers:
+      - SimpleGlazingSystem
+
+GlobalGeometryRules:
+    Starting Vertex Position: UpperLeftCorner
+    Vertex Entry Direction: Counterclockwise
+    Coordinate System: World
+
+# Perimeter + Core Layout (9 zones):
+# Building: 30m (X) x 24m (Y), Perimeter depth: 4.5m
+# Core: 21m x 15m
+#
+# +--------+------------+--------+
+# | P_NW   |   P_N      | P_NE   |  y: 19.5-24
+# | 4.5x4.5|  21x4.5    | 4.5x4.5|
+# +--------+------------+--------+
+# | P_W    |   Core     | P_E    |  y: 4.5-19.5
+# | 4.5x15 |  21x15     | 4.5x15 |
+# +--------+------------+--------+
+# | P_SW   |   P_S      | P_SE   |  y: 0-4.5
+# | 4.5x4.5|  21x4.5    | 4.5x4.5|
+# +--------+------------+--------+
+#   x:0-4.5  x:4.5-25.5  x:25.5-30
+
+Zone:
+  # Corner zones
+  - Name: Perimeter_SW
+    Direction of Relative North: null
+    X Origin: 0
+    Y Origin: 0
+    Z Origin: 0
+    Type: 1
+    Multiplier: 1
+    Ceiling Height: autocalculate
+    Volume: autocalculate
+    Floor Area: autocalculate
+
+  - Name: Perimeter_SE
+    Direction of Relative North: null
+    X Origin: 25.5
+    Y Origin: 0
+    Z Origin: 0
+    Type: 1
+    Multiplier: 1
+    Ceiling Height: autocalculate
+    Volume: autocalculate
+    Floor Area: autocalculate
+
+  - Name: Perimeter_NW
+    Direction of Relative North: null
+    X Origin: 0
+    Y Origin: 19.5
+    Z Origin: 0
+    Type: 1
+    Multiplier: 1
+    Ceiling Height: autocalculate
+    Volume: autocalculate
+    Floor Area: autocalculate
+
+  - Name: Perimeter_NE
+    Direction of Relative North: null
+    X Origin: 25.5
+    Y Origin: 19.5
+    Z Origin: 0
+    Type: 1
+    Multiplier: 1
+    Ceiling Height: autocalculate
+    Volume: autocalculate
+    Floor Area: autocalculate
+
+  # Edge zones
+  - Name: Perimeter_S
+    Direction of Relative North: null
+    X Origin: 4.5
+    Y Origin: 0
+    Z Origin: 0
+    Type: 1
+    Multiplier: 1
+    Ceiling Height: autocalculate
+    Volume: autocalculate
+    Floor Area: autocalculate
+
+  - Name: Perimeter_N
+    Direction of Relative North: null
+    X Origin: 4.5
+    Y Origin: 19.5
+    Z Origin: 0
+    Type: 1
+    Multiplier: 1
+    Ceiling Height: autocalculate
+    Volume: autocalculate
+    Floor Area: autocalculate
+
+  - Name: Perimeter_W
+    Direction of Relative North: null
+    X Origin: 0
+    Y Origin: 4.5
+    Z Origin: 0
+    Type: 1
+    Multiplier: 1
+    Ceiling Height: autocalculate
+    Volume: autocalculate
+    Floor Area: autocalculate
+
+  - Name: Perimeter_E
+    Direction of Relative North: null
+    X Origin: 25.5
+    Y Origin: 4.5
+    Z Origin: 0
+    Type: 1
+    Multiplier: 1
+    Ceiling Height: autocalculate
+    Volume: autocalculate
+    Floor Area: autocalculate
+
+  # Core zone
+  - Name: Core
+    Direction of Relative North: null
+    X Origin: 4.5
+    Y Origin: 4.5
+    Z Origin: 0
+    Type: 1
+    Multiplier: 1
+    Ceiling Height: autocalculate
+    Volume: autocalculate
+    Floor Area: autocalculate
+
+BuildingSurface:Detailed:
+  # Perimeter_SW (0-4.5, 0-4.5)
+  - Name: Perimeter_SW_Floor
+    Surface Type: Floor
+    Construction Name: Floor_Const
+    Zone Name: Perimeter_SW
+    Space Name: null
+    Outside Boundary Condition: Ground
+    Outside Boundary Condition Object: null
+    Sun Exposure: NoSun
+    Wind Exposure: NoWind
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 0, Y: 4.5, Z: 0}
+      - {X: 4.5, Y: 4.5, Z: 0}
+      - {X: 4.5, Y: 0, Z: 0}
+      - {X: 0, Y: 0, Z: 0}
+
+  - Name: Perimeter_SW_Roof
+    Surface Type: Roof
+    Construction Name: Roof_Const
+    Zone Name: Perimeter_SW
+    Space Name: null
+    Outside Boundary Condition: Outdoors
+    Outside Boundary Condition Object: null
+    Sun Exposure: SunExposed
+    Wind Exposure: WindExposed
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 0, Y: 0, Z: 3.5}
+      - {X: 4.5, Y: 0, Z: 3.5}
+      - {X: 4.5, Y: 4.5, Z: 3.5}
+      - {X: 0, Y: 4.5, Z: 3.5}
+
+  - Name: Perimeter_SW_Wall_South
+    Surface Type: Wall
+    Construction Name: Exterior_Wall_Const
+    Zone Name: Perimeter_SW
+    Space Name: null
+    Outside Boundary Condition: Outdoors
+    Outside Boundary Condition Object: null
+    Sun Exposure: SunExposed
+    Wind Exposure: WindExposed
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 0, Y: 0, Z: 0}
+      - {X: 4.5, Y: 0, Z: 0}
+      - {X: 4.5, Y: 0, Z: 3.5}
+      - {X: 0, Y: 0, Z: 3.5}
+
+  - Name: Perimeter_SW_Wall_West
+    Surface Type: Wall
+    Construction Name: Exterior_Wall_Const
+    Zone Name: Perimeter_SW
+    Space Name: null
+    Outside Boundary Condition: Outdoors
+    Outside Boundary Condition Object: null
+    Sun Exposure: SunExposed
+    Wind Exposure: WindExposed
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 0, Y: 0, Z: 3.5}
+      - {X: 0, Y: 4.5, Z: 3.5}
+      - {X: 0, Y: 4.5, Z: 0}
+      - {X: 0, Y: 0, Z: 0}
+
+  - Name: Perimeter_SW_Wall_East
+    Surface Type: Wall
+    Construction Name: Interior_Wall_Const
+    Zone Name: Perimeter_SW
+    Space Name: null
+    Outside Boundary Condition: Surface
+    Outside Boundary Condition Object: Perimeter_S_Wall_West
+    Sun Exposure: NoSun
+    Wind Exposure: NoWind
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 4.5, Y: 0, Z: 0}
+      - {X: 4.5, Y: 4.5, Z: 0}
+      - {X: 4.5, Y: 4.5, Z: 3.5}
+      - {X: 4.5, Y: 0, Z: 3.5}
+
+  - Name: Perimeter_SW_Wall_North
+    Surface Type: Wall
+    Construction Name: Interior_Wall_Const
+    Zone Name: Perimeter_SW
+    Space Name: null
+    Outside Boundary Condition: Surface
+    Outside Boundary Condition Object: Perimeter_W_Wall_South
+    Sun Exposure: NoSun
+    Wind Exposure: NoWind
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 4.5, Y: 4.5, Z: 3.5}
+      - {X: 4.5, Y: 4.5, Z: 0}
+      - {X: 0, Y: 4.5, Z: 0}
+      - {X: 0, Y: 4.5, Z: 3.5}
+
+  # Perimeter_S (4.5-25.5, 0-4.5)
+  - Name: Perimeter_S_Floor
+    Surface Type: Floor
+    Construction Name: Floor_Const
+    Zone Name: Perimeter_S
+    Space Name: null
+    Outside Boundary Condition: Ground
+    Outside Boundary Condition Object: null
+    Sun Exposure: NoSun
+    Wind Exposure: NoWind
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 4.5, Y: 4.5, Z: 0}
+      - {X: 25.5, Y: 4.5, Z: 0}
+      - {X: 25.5, Y: 0, Z: 0}
+      - {X: 4.5, Y: 0, Z: 0}
+
+  - Name: Perimeter_S_Roof
+    Surface Type: Roof
+    Construction Name: Roof_Const
+    Zone Name: Perimeter_S
+    Space Name: null
+    Outside Boundary Condition: Outdoors
+    Outside Boundary Condition Object: null
+    Sun Exposure: SunExposed
+    Wind Exposure: WindExposed
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 4.5, Y: 0, Z: 3.5}
+      - {X: 25.5, Y: 0, Z: 3.5}
+      - {X: 25.5, Y: 4.5, Z: 3.5}
+      - {X: 4.5, Y: 4.5, Z: 3.5}
+
+  - Name: Perimeter_S_Wall_South
+    Surface Type: Wall
+    Construction Name: Exterior_Wall_Const
+    Zone Name: Perimeter_S
+    Space Name: null
+    Outside Boundary Condition: Outdoors
+    Outside Boundary Condition Object: null
+    Sun Exposure: SunExposed
+    Wind Exposure: WindExposed
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 4.5, Y: 0, Z: 0}
+      - {X: 25.5, Y: 0, Z: 0}
+      - {X: 25.5, Y: 0, Z: 3.5}
+      - {X: 4.5, Y: 0, Z: 3.5}
+
+  - Name: Perimeter_S_Wall_West
+    Surface Type: Wall
+    Construction Name: Interior_Wall_Const
+    Zone Name: Perimeter_S
+    Space Name: null
+    Outside Boundary Condition: Surface
+    Outside Boundary Condition Object: Perimeter_SW_Wall_East
+    Sun Exposure: NoSun
+    Wind Exposure: NoWind
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 4.5, Y: 0, Z: 3.5}
+      - {X: 4.5, Y: 4.5, Z: 3.5}
+      - {X: 4.5, Y: 4.5, Z: 0}
+      - {X: 4.5, Y: 0, Z: 0}
+
+  - Name: Perimeter_S_Wall_East
+    Surface Type: Wall
+    Construction Name: Interior_Wall_Const
+    Zone Name: Perimeter_S
+    Space Name: null
+    Outside Boundary Condition: Surface
+    Outside Boundary Condition Object: Perimeter_SE_Wall_West
+    Sun Exposure: NoSun
+    Wind Exposure: NoWind
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 25.5, Y: 0, Z: 0}
+      - {X: 25.5, Y: 4.5, Z: 0}
+      - {X: 25.5, Y: 4.5, Z: 3.5}
+      - {X: 25.5, Y: 0, Z: 3.5}
+
+  - Name: Perimeter_S_Wall_North
+    Surface Type: Wall
+    Construction Name: Interior_Wall_Const
+    Zone Name: Perimeter_S
+    Space Name: null
+    Outside Boundary Condition: Surface
+    Outside Boundary Condition Object: Core_Wall_South
+    Sun Exposure: NoSun
+    Wind Exposure: NoWind
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 25.5, Y: 4.5, Z: 3.5}
+      - {X: 25.5, Y: 4.5, Z: 0}
+      - {X: 4.5, Y: 4.5, Z: 0}
+      - {X: 4.5, Y: 4.5, Z: 3.5}
+
+  # Perimeter_SE (25.5-30, 0-4.5)
+  - Name: Perimeter_SE_Floor
+    Surface Type: Floor
+    Construction Name: Floor_Const
+    Zone Name: Perimeter_SE
+    Space Name: null
+    Outside Boundary Condition: Ground
+    Outside Boundary Condition Object: null
+    Sun Exposure: NoSun
+    Wind Exposure: NoWind
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 25.5, Y: 4.5, Z: 0}
+      - {X: 30, Y: 4.5, Z: 0}
+      - {X: 30, Y: 0, Z: 0}
+      - {X: 25.5, Y: 0, Z: 0}
+
+  - Name: Perimeter_SE_Roof
+    Surface Type: Roof
+    Construction Name: Roof_Const
+    Zone Name: Perimeter_SE
+    Space Name: null
+    Outside Boundary Condition: Outdoors
+    Outside Boundary Condition Object: null
+    Sun Exposure: SunExposed
+    Wind Exposure: WindExposed
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 25.5, Y: 0, Z: 3.5}
+      - {X: 30, Y: 0, Z: 3.5}
+      - {X: 30, Y: 4.5, Z: 3.5}
+      - {X: 25.5, Y: 4.5, Z: 3.5}
+
+  - Name: Perimeter_SE_Wall_South
+    Surface Type: Wall
+    Construction Name: Exterior_Wall_Const
+    Zone Name: Perimeter_SE
+    Space Name: null
+    Outside Boundary Condition: Outdoors
+    Outside Boundary Condition Object: null
+    Sun Exposure: SunExposed
+    Wind Exposure: WindExposed
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 25.5, Y: 0, Z: 0}
+      - {X: 30, Y: 0, Z: 0}
+      - {X: 30, Y: 0, Z: 3.5}
+      - {X: 25.5, Y: 0, Z: 3.5}
+
+  - Name: Perimeter_SE_Wall_East
+    Surface Type: Wall
+    Construction Name: Exterior_Wall_Const
+    Zone Name: Perimeter_SE
+    Space Name: null
+    Outside Boundary Condition: Outdoors
+    Outside Boundary Condition Object: null
+    Sun Exposure: SunExposed
+    Wind Exposure: WindExposed
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 30, Y: 0, Z: 0}
+      - {X: 30, Y: 4.5, Z: 0}
+      - {X: 30, Y: 4.5, Z: 3.5}
+      - {X: 30, Y: 0, Z: 3.5}
+
+  - Name: Perimeter_SE_Wall_West
+    Surface Type: Wall
+    Construction Name: Interior_Wall_Const
+    Zone Name: Perimeter_SE
+    Space Name: null
+    Outside Boundary Condition: Surface
+    Outside Boundary Condition Object: Perimeter_S_Wall_East
+    Sun Exposure: NoSun
+    Wind Exposure: NoWind
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 25.5, Y: 0, Z: 3.5}
+      - {X: 25.5, Y: 4.5, Z: 3.5}
+      - {X: 25.5, Y: 4.5, Z: 0}
+      - {X: 25.5, Y: 0, Z: 0}
+
+  - Name: Perimeter_SE_Wall_North
+    Surface Type: Wall
+    Construction Name: Interior_Wall_Const
+    Zone Name: Perimeter_SE
+    Space Name: null
+    Outside Boundary Condition: Surface
+    Outside Boundary Condition Object: Perimeter_E_Wall_South
+    Sun Exposure: NoSun
+    Wind Exposure: NoWind
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 30, Y: 4.5, Z: 3.5}
+      - {X: 30, Y: 4.5, Z: 0}
+      - {X: 25.5, Y: 4.5, Z: 0}
+      - {X: 25.5, Y: 4.5, Z: 3.5}
+
+  # Core (4.5-25.5, 4.5-19.5)
+  - Name: Core_Floor
+    Surface Type: Floor
+    Construction Name: Floor_Const
+    Zone Name: Core
+    Space Name: null
+    Outside Boundary Condition: Ground
+    Outside Boundary Condition Object: null
+    Sun Exposure: NoSun
+    Wind Exposure: NoWind
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 4.5, Y: 19.5, Z: 0}
+      - {X: 25.5, Y: 19.5, Z: 0}
+      - {X: 25.5, Y: 4.5, Z: 0}
+      - {X: 4.5, Y: 4.5, Z: 0}
+
+  - Name: Core_Roof
+    Surface Type: Roof
+    Construction Name: Roof_Const
+    Zone Name: Core
+    Space Name: null
+    Outside Boundary Condition: Outdoors
+    Outside Boundary Condition Object: null
+    Sun Exposure: SunExposed
+    Wind Exposure: WindExposed
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 4.5, Y: 4.5, Z: 3.5}
+      - {X: 25.5, Y: 4.5, Z: 3.5}
+      - {X: 25.5, Y: 19.5, Z: 3.5}
+      - {X: 4.5, Y: 19.5, Z: 3.5}
+
+  - Name: Core_Wall_South
+    Surface Type: Wall
+    Construction Name: Interior_Wall_Const
+    Zone Name: Core
+    Space Name: null
+    Outside Boundary Condition: Surface
+    Outside Boundary Condition Object: Perimeter_S_Wall_North
+    Sun Exposure: NoSun
+    Wind Exposure: NoWind
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 4.5, Y: 4.5, Z: 0}
+      - {X: 25.5, Y: 4.5, Z: 0}
+      - {X: 25.5, Y: 4.5, Z: 3.5}
+      - {X: 4.5, Y: 4.5, Z: 3.5}
+
+  - Name: Core_Wall_North
+    Surface Type: Wall
+    Construction Name: Interior_Wall_Const
+    Zone Name: Core
+    Space Name: null
+    Outside Boundary Condition: Surface
+    Outside Boundary Condition Object: Perimeter_N_Wall_South
+    Sun Exposure: NoSun
+    Wind Exposure: NoWind
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 25.5, Y: 19.5, Z: 3.5}
+      - {X: 25.5, Y: 19.5, Z: 0}
+      - {X: 4.5, Y: 19.5, Z: 0}
+      - {X: 4.5, Y: 19.5, Z: 3.5}
+
+  - Name: Core_Wall_West
+    Surface Type: Wall
+    Construction Name: Interior_Wall_Const
+    Zone Name: Core
+    Space Name: null
+    Outside Boundary Condition: Surface
+    Outside Boundary Condition Object: Perimeter_W_Wall_East
+    Sun Exposure: NoSun
+    Wind Exposure: NoWind
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 4.5, Y: 4.5, Z: 3.5}
+      - {X: 4.5, Y: 19.5, Z: 3.5}
+      - {X: 4.5, Y: 19.5, Z: 0}
+      - {X: 4.5, Y: 4.5, Z: 0}
+
+  - Name: Core_Wall_East
+    Surface Type: Wall
+    Construction Name: Interior_Wall_Const
+    Zone Name: Core
+    Space Name: null
+    Outside Boundary Condition: Surface
+    Outside Boundary Condition Object: Perimeter_E_Wall_West
+    Sun Exposure: NoSun
+    Wind Exposure: NoWind
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 25.5, Y: 4.5, Z: 0}
+      - {X: 25.5, Y: 19.5, Z: 0}
+      - {X: 25.5, Y: 19.5, Z: 3.5}
+      - {X: 25.5, Y: 4.5, Z: 3.5}
+
+  # Perimeter_W (0-4.5, 4.5-19.5)
+  - Name: Perimeter_W_Floor
+    Surface Type: Floor
+    Construction Name: Floor_Const
+    Zone Name: Perimeter_W
+    Space Name: null
+    Outside Boundary Condition: Ground
+    Outside Boundary Condition Object: null
+    Sun Exposure: NoSun
+    Wind Exposure: NoWind
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 0, Y: 19.5, Z: 0}
+      - {X: 4.5, Y: 19.5, Z: 0}
+      - {X: 4.5, Y: 4.5, Z: 0}
+      - {X: 0, Y: 4.5, Z: 0}
+
+  - Name: Perimeter_W_Roof
+    Surface Type: Roof
+    Construction Name: Roof_Const
+    Zone Name: Perimeter_W
+    Space Name: null
+    Outside Boundary Condition: Outdoors
+    Outside Boundary Condition Object: null
+    Sun Exposure: SunExposed
+    Wind Exposure: WindExposed
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 0, Y: 4.5, Z: 3.5}
+      - {X: 4.5, Y: 4.5, Z: 3.5}
+      - {X: 4.5, Y: 19.5, Z: 3.5}
+      - {X: 0, Y: 19.5, Z: 3.5}
+
+  - Name: Perimeter_W_Wall_West
+    Surface Type: Wall
+    Construction Name: Exterior_Wall_Const
+    Zone Name: Perimeter_W
+    Space Name: null
+    Outside Boundary Condition: Outdoors
+    Outside Boundary Condition Object: null
+    Sun Exposure: SunExposed
+    Wind Exposure: WindExposed
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 0, Y: 4.5, Z: 3.5}
+      - {X: 0, Y: 19.5, Z: 3.5}
+      - {X: 0, Y: 19.5, Z: 0}
+      - {X: 0, Y: 4.5, Z: 0}
+
+  - Name: Perimeter_W_Wall_South
+    Surface Type: Wall
+    Construction Name: Interior_Wall_Const
+    Zone Name: Perimeter_W
+    Space Name: null
+    Outside Boundary Condition: Surface
+    Outside Boundary Condition Object: Perimeter_SW_Wall_North
+    Sun Exposure: NoSun
+    Wind Exposure: NoWind
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 0, Y: 4.5, Z: 0}
+      - {X: 4.5, Y: 4.5, Z: 0}
+      - {X: 4.5, Y: 4.5, Z: 3.5}
+      - {X: 0, Y: 4.5, Z: 3.5}
+
+  - Name: Perimeter_W_Wall_North
+    Surface Type: Wall
+    Construction Name: Interior_Wall_Const
+    Zone Name: Perimeter_W
+    Space Name: null
+    Outside Boundary Condition: Surface
+    Outside Boundary Condition Object: Perimeter_NW_Wall_South
+    Sun Exposure: NoSun
+    Wind Exposure: NoWind
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 4.5, Y: 19.5, Z: 3.5}
+      - {X: 4.5, Y: 19.5, Z: 0}
+      - {X: 0, Y: 19.5, Z: 0}
+      - {X: 0, Y: 19.5, Z: 3.5}
+
+  - Name: Perimeter_W_Wall_East
+    Surface Type: Wall
+    Construction Name: Interior_Wall_Const
+    Zone Name: Perimeter_W
+    Space Name: null
+    Outside Boundary Condition: Surface
+    Outside Boundary Condition Object: Core_Wall_West
+    Sun Exposure: NoSun
+    Wind Exposure: NoWind
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 4.5, Y: 4.5, Z: 0}
+      - {X: 4.5, Y: 19.5, Z: 0}
+      - {X: 4.5, Y: 19.5, Z: 3.5}
+      - {X: 4.5, Y: 4.5, Z: 3.5}
+
+  # Perimeter_E (25.5-30, 4.5-19.5)
+  - Name: Perimeter_E_Floor
+    Surface Type: Floor
+    Construction Name: Floor_Const
+    Zone Name: Perimeter_E
+    Space Name: null
+    Outside Boundary Condition: Ground
+    Outside Boundary Condition Object: null
+    Sun Exposure: NoSun
+    Wind Exposure: NoWind
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 25.5, Y: 19.5, Z: 0}
+      - {X: 30, Y: 19.5, Z: 0}
+      - {X: 30, Y: 4.5, Z: 0}
+      - {X: 25.5, Y: 4.5, Z: 0}
+
+  - Name: Perimeter_E_Roof
+    Surface Type: Roof
+    Construction Name: Roof_Const
+    Zone Name: Perimeter_E
+    Space Name: null
+    Outside Boundary Condition: Outdoors
+    Outside Boundary Condition Object: null
+    Sun Exposure: SunExposed
+    Wind Exposure: WindExposed
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 25.5, Y: 4.5, Z: 3.5}
+      - {X: 30, Y: 4.5, Z: 3.5}
+      - {X: 30, Y: 19.5, Z: 3.5}
+      - {X: 25.5, Y: 19.5, Z: 3.5}
+
+  - Name: Perimeter_E_Wall_East
+    Surface Type: Wall
+    Construction Name: Exterior_Wall_Const
+    Zone Name: Perimeter_E
+    Space Name: null
+    Outside Boundary Condition: Outdoors
+    Outside Boundary Condition Object: null
+    Sun Exposure: SunExposed
+    Wind Exposure: WindExposed
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 30, Y: 4.5, Z: 0}
+      - {X: 30, Y: 19.5, Z: 0}
+      - {X: 30, Y: 19.5, Z: 3.5}
+      - {X: 30, Y: 4.5, Z: 3.5}
+
+  - Name: Perimeter_E_Wall_South
+    Surface Type: Wall
+    Construction Name: Interior_Wall_Const
+    Zone Name: Perimeter_E
+    Space Name: null
+    Outside Boundary Condition: Surface
+    Outside Boundary Condition Object: Perimeter_SE_Wall_North
+    Sun Exposure: NoSun
+    Wind Exposure: NoWind
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 25.5, Y: 4.5, Z: 0}
+      - {X: 30, Y: 4.5, Z: 0}
+      - {X: 30, Y: 4.5, Z: 3.5}
+      - {X: 25.5, Y: 4.5, Z: 3.5}
+
+  - Name: Perimeter_E_Wall_North
+    Surface Type: Wall
+    Construction Name: Interior_Wall_Const
+    Zone Name: Perimeter_E
+    Space Name: null
+    Outside Boundary Condition: Surface
+    Outside Boundary Condition Object: Perimeter_NE_Wall_South
+    Sun Exposure: NoSun
+    Wind Exposure: NoWind
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 30, Y: 19.5, Z: 3.5}
+      - {X: 30, Y: 19.5, Z: 0}
+      - {X: 25.5, Y: 19.5, Z: 0}
+      - {X: 25.5, Y: 19.5, Z: 3.5}
+
+  - Name: Perimeter_E_Wall_West
+    Surface Type: Wall
+    Construction Name: Interior_Wall_Const
+    Zone Name: Perimeter_E
+    Space Name: null
+    Outside Boundary Condition: Surface
+    Outside Boundary Condition Object: Core_Wall_East
+    Sun Exposure: NoSun
+    Wind Exposure: NoWind
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 25.5, Y: 4.5, Z: 3.5}
+      - {X: 25.5, Y: 19.5, Z: 3.5}
+      - {X: 25.5, Y: 19.5, Z: 0}
+      - {X: 25.5, Y: 4.5, Z: 0}
+
+  # Perimeter_NW (0-4.5, 19.5-24)
+  - Name: Perimeter_NW_Floor
+    Surface Type: Floor
+    Construction Name: Floor_Const
+    Zone Name: Perimeter_NW
+    Space Name: null
+    Outside Boundary Condition: Ground
+    Outside Boundary Condition Object: null
+    Sun Exposure: NoSun
+    Wind Exposure: NoWind
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 0, Y: 24, Z: 0}
+      - {X: 4.5, Y: 24, Z: 0}
+      - {X: 4.5, Y: 19.5, Z: 0}
+      - {X: 0, Y: 19.5, Z: 0}
+
+  - Name: Perimeter_NW_Roof
+    Surface Type: Roof
+    Construction Name: Roof_Const
+    Zone Name: Perimeter_NW
+    Space Name: null
+    Outside Boundary Condition: Outdoors
+    Outside Boundary Condition Object: null
+    Sun Exposure: SunExposed
+    Wind Exposure: WindExposed
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 0, Y: 19.5, Z: 3.5}
+      - {X: 4.5, Y: 19.5, Z: 3.5}
+      - {X: 4.5, Y: 24, Z: 3.5}
+      - {X: 0, Y: 24, Z: 3.5}
+
+  - Name: Perimeter_NW_Wall_North
+    Surface Type: Wall
+    Construction Name: Exterior_Wall_Const
+    Zone Name: Perimeter_NW
+    Space Name: null
+    Outside Boundary Condition: Outdoors
+    Outside Boundary Condition Object: null
+    Sun Exposure: SunExposed
+    Wind Exposure: WindExposed
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 4.5, Y: 24, Z: 3.5}
+      - {X: 4.5, Y: 24, Z: 0}
+      - {X: 0, Y: 24, Z: 0}
+      - {X: 0, Y: 24, Z: 3.5}
+
+  - Name: Perimeter_NW_Wall_West
+    Surface Type: Wall
+    Construction Name: Exterior_Wall_Const
+    Zone Name: Perimeter_NW
+    Space Name: null
+    Outside Boundary Condition: Outdoors
+    Outside Boundary Condition Object: null
+    Sun Exposure: SunExposed
+    Wind Exposure: WindExposed
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 0, Y: 19.5, Z: 3.5}
+      - {X: 0, Y: 24, Z: 3.5}
+      - {X: 0, Y: 24, Z: 0}
+      - {X: 0, Y: 19.5, Z: 0}
+
+  - Name: Perimeter_NW_Wall_East
+    Surface Type: Wall
+    Construction Name: Interior_Wall_Const
+    Zone Name: Perimeter_NW
+    Space Name: null
+    Outside Boundary Condition: Surface
+    Outside Boundary Condition Object: Perimeter_N_Wall_West
+    Sun Exposure: NoSun
+    Wind Exposure: NoWind
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 4.5, Y: 19.5, Z: 0}
+      - {X: 4.5, Y: 24, Z: 0}
+      - {X: 4.5, Y: 24, Z: 3.5}
+      - {X: 4.5, Y: 19.5, Z: 3.5}
+
+  - Name: Perimeter_NW_Wall_South
+    Surface Type: Wall
+    Construction Name: Interior_Wall_Const
+    Zone Name: Perimeter_NW
+    Space Name: null
+    Outside Boundary Condition: Surface
+    Outside Boundary Condition Object: Perimeter_W_Wall_North
+    Sun Exposure: NoSun
+    Wind Exposure: NoWind
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 0, Y: 19.5, Z: 0}
+      - {X: 4.5, Y: 19.5, Z: 0}
+      - {X: 4.5, Y: 19.5, Z: 3.5}
+      - {X: 0, Y: 19.5, Z: 3.5}
+
+  # Perimeter_N (4.5-25.5, 19.5-24)
+  - Name: Perimeter_N_Floor
+    Surface Type: Floor
+    Construction Name: Floor_Const
+    Zone Name: Perimeter_N
+    Space Name: null
+    Outside Boundary Condition: Ground
+    Outside Boundary Condition Object: null
+    Sun Exposure: NoSun
+    Wind Exposure: NoWind
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 4.5, Y: 24, Z: 0}
+      - {X: 25.5, Y: 24, Z: 0}
+      - {X: 25.5, Y: 19.5, Z: 0}
+      - {X: 4.5, Y: 19.5, Z: 0}
+
+  - Name: Perimeter_N_Roof
+    Surface Type: Roof
+    Construction Name: Roof_Const
+    Zone Name: Perimeter_N
+    Space Name: null
+    Outside Boundary Condition: Outdoors
+    Outside Boundary Condition Object: null
+    Sun Exposure: SunExposed
+    Wind Exposure: WindExposed
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 4.5, Y: 19.5, Z: 3.5}
+      - {X: 25.5, Y: 19.5, Z: 3.5}
+      - {X: 25.5, Y: 24, Z: 3.5}
+      - {X: 4.5, Y: 24, Z: 3.5}
+
+  - Name: Perimeter_N_Wall_North
+    Surface Type: Wall
+    Construction Name: Exterior_Wall_Const
+    Zone Name: Perimeter_N
+    Space Name: null
+    Outside Boundary Condition: Outdoors
+    Outside Boundary Condition Object: null
+    Sun Exposure: SunExposed
+    Wind Exposure: WindExposed
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 25.5, Y: 24, Z: 3.5}
+      - {X: 25.5, Y: 24, Z: 0}
+      - {X: 4.5, Y: 24, Z: 0}
+      - {X: 4.5, Y: 24, Z: 3.5}
+
+  - Name: Perimeter_N_Wall_West
+    Surface Type: Wall
+    Construction Name: Interior_Wall_Const
+    Zone Name: Perimeter_N
+    Space Name: null
+    Outside Boundary Condition: Surface
+    Outside Boundary Condition Object: Perimeter_NW_Wall_East
+    Sun Exposure: NoSun
+    Wind Exposure: NoWind
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 4.5, Y: 19.5, Z: 3.5}
+      - {X: 4.5, Y: 24, Z: 3.5}
+      - {X: 4.5, Y: 24, Z: 0}
+      - {X: 4.5, Y: 19.5, Z: 0}
+
+  - Name: Perimeter_N_Wall_East
+    Surface Type: Wall
+    Construction Name: Interior_Wall_Const
+    Zone Name: Perimeter_N
+    Space Name: null
+    Outside Boundary Condition: Surface
+    Outside Boundary Condition Object: Perimeter_NE_Wall_West
+    Sun Exposure: NoSun
+    Wind Exposure: NoWind
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 25.5, Y: 19.5, Z: 0}
+      - {X: 25.5, Y: 24, Z: 0}
+      - {X: 25.5, Y: 24, Z: 3.5}
+      - {X: 25.5, Y: 19.5, Z: 3.5}
+
+  - Name: Perimeter_N_Wall_South
+    Surface Type: Wall
+    Construction Name: Interior_Wall_Const
+    Zone Name: Perimeter_N
+    Space Name: null
+    Outside Boundary Condition: Surface
+    Outside Boundary Condition Object: Core_Wall_North
+    Sun Exposure: NoSun
+    Wind Exposure: NoWind
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 4.5, Y: 19.5, Z: 0}
+      - {X: 25.5, Y: 19.5, Z: 0}
+      - {X: 25.5, Y: 19.5, Z: 3.5}
+      - {X: 4.5, Y: 19.5, Z: 3.5}
+
+  # Perimeter_NE (25.5-30, 19.5-24)
+  - Name: Perimeter_NE_Floor
+    Surface Type: Floor
+    Construction Name: Floor_Const
+    Zone Name: Perimeter_NE
+    Space Name: null
+    Outside Boundary Condition: Ground
+    Outside Boundary Condition Object: null
+    Sun Exposure: NoSun
+    Wind Exposure: NoWind
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 25.5, Y: 24, Z: 0}
+      - {X: 30, Y: 24, Z: 0}
+      - {X: 30, Y: 19.5, Z: 0}
+      - {X: 25.5, Y: 19.5, Z: 0}
+
+  - Name: Perimeter_NE_Roof
+    Surface Type: Roof
+    Construction Name: Roof_Const
+    Zone Name: Perimeter_NE
+    Space Name: null
+    Outside Boundary Condition: Outdoors
+    Outside Boundary Condition Object: null
+    Sun Exposure: SunExposed
+    Wind Exposure: WindExposed
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 25.5, Y: 19.5, Z: 3.5}
+      - {X: 30, Y: 19.5, Z: 3.5}
+      - {X: 30, Y: 24, Z: 3.5}
+      - {X: 25.5, Y: 24, Z: 3.5}
+
+  - Name: Perimeter_NE_Wall_North
+    Surface Type: Wall
+    Construction Name: Exterior_Wall_Const
+    Zone Name: Perimeter_NE
+    Space Name: null
+    Outside Boundary Condition: Outdoors
+    Outside Boundary Condition Object: null
+    Sun Exposure: SunExposed
+    Wind Exposure: WindExposed
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 30, Y: 24, Z: 3.5}
+      - {X: 30, Y: 24, Z: 0}
+      - {X: 25.5, Y: 24, Z: 0}
+      - {X: 25.5, Y: 24, Z: 3.5}
+
+  - Name: Perimeter_NE_Wall_East
+    Surface Type: Wall
+    Construction Name: Exterior_Wall_Const
+    Zone Name: Perimeter_NE
+    Space Name: null
+    Outside Boundary Condition: Outdoors
+    Outside Boundary Condition Object: null
+    Sun Exposure: SunExposed
+    Wind Exposure: WindExposed
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 30, Y: 19.5, Z: 0}
+      - {X: 30, Y: 24, Z: 0}
+      - {X: 30, Y: 24, Z: 3.5}
+      - {X: 30, Y: 19.5, Z: 3.5}
+
+  - Name: Perimeter_NE_Wall_West
+    Surface Type: Wall
+    Construction Name: Interior_Wall_Const
+    Zone Name: Perimeter_NE
+    Space Name: null
+    Outside Boundary Condition: Surface
+    Outside Boundary Condition Object: Perimeter_N_Wall_East
+    Sun Exposure: NoSun
+    Wind Exposure: NoWind
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 25.5, Y: 19.5, Z: 3.5}
+      - {X: 25.5, Y: 24, Z: 3.5}
+      - {X: 25.5, Y: 24, Z: 0}
+      - {X: 25.5, Y: 19.5, Z: 0}
+
+  - Name: Perimeter_NE_Wall_South
+    Surface Type: Wall
+    Construction Name: Interior_Wall_Const
+    Zone Name: Perimeter_NE
+    Space Name: null
+    Outside Boundary Condition: Surface
+    Outside Boundary Condition Object: Perimeter_E_Wall_North
+    Sun Exposure: NoSun
+    Wind Exposure: NoWind
+    View Factor to Ground: autocalculate
+    Vertices:
+      - {X: 25.5, Y: 19.5, Z: 0}
+      - {X: 30, Y: 19.5, Z: 0}
+      - {X: 30, Y: 19.5, Z: 3.5}
+      - {X: 25.5, Y: 19.5, Z: 3.5}
+
+FenestrationSurface:Detailed:
+  # South wall windows
+  - Name: Perimeter_S_Window_1
+    Surface Type: Window
+    Construction Name: Window_Const
+    Building Surface Name: Perimeter_S_Wall_South
+    Outside Boundary Condition Object: null
+    View Factor to Ground: autocalculate
+    Frame and Divider Name: null
+    Multiplier: 1
+    Number of Vertices: autocalculate
+    Vertices:
+      - {X: 6, Y: 0, Z: 0.9}
+      - {X: 10, Y: 0, Z: 0.9}
+      - {X: 10, Y: 0, Z: 2.8}
+      - {X: 6, Y: 0, Z: 2.8}
+
+  - Name: Perimeter_S_Window_2
+    Surface Type: Window
+    Construction Name: Window_Const
+    Building Surface Name: Perimeter_S_Wall_South
+    Outside Boundary Condition Object: null
+    View Factor to Ground: autocalculate
+    Frame and Divider Name: null
+    Multiplier: 1
+    Number of Vertices: autocalculate
+    Vertices:
+      - {X: 12, Y: 0, Z: 0.9}
+      - {X: 16, Y: 0, Z: 0.9}
+      - {X: 16, Y: 0, Z: 2.8}
+      - {X: 12, Y: 0, Z: 2.8}
+
+  - Name: Perimeter_S_Window_3
+    Surface Type: Window
+    Construction Name: Window_Const
+    Building Surface Name: Perimeter_S_Wall_South
+    Outside Boundary Condition Object: null
+    View Factor to Ground: autocalculate
+    Frame and Divider Name: null
+    Multiplier: 1
+    Number of Vertices: autocalculate
+    Vertices:
+      - {X: 18, Y: 0, Z: 0.9}
+      - {X: 22, Y: 0, Z: 0.9}
+      - {X: 22, Y: 0, Z: 2.8}
+      - {X: 18, Y: 0, Z: 2.8}
+
+  # North wall windows
+  - Name: Perimeter_N_Window_1
+    Surface Type: Window
+    Construction Name: Window_Const
+    Building Surface Name: Perimeter_N_Wall_North
+    Outside Boundary Condition Object: null
+    View Factor to Ground: autocalculate
+    Frame and Divider Name: null
+    Multiplier: 1
+    Number of Vertices: autocalculate
+    Vertices:
+      - {X: 22, Y: 24, Z: 2.8}
+      - {X: 22, Y: 24, Z: 0.9}
+      - {X: 18, Y: 24, Z: 0.9}
+      - {X: 18, Y: 24, Z: 2.8}
+
+  - Name: Perimeter_N_Window_2
+    Surface Type: Window
+    Construction Name: Window_Const
+    Building Surface Name: Perimeter_N_Wall_North
+    Outside Boundary Condition Object: null
+    View Factor to Ground: autocalculate
+    Frame and Divider Name: null
+    Multiplier: 1
+    Number of Vertices: autocalculate
+    Vertices:
+      - {X: 16, Y: 24, Z: 2.8}
+      - {X: 16, Y: 24, Z: 0.9}
+      - {X: 12, Y: 24, Z: 0.9}
+      - {X: 12, Y: 24, Z: 2.8}
+
+  - Name: Perimeter_N_Window_3
+    Surface Type: Window
+    Construction Name: Window_Const
+    Building Surface Name: Perimeter_N_Wall_North
+    Outside Boundary Condition Object: null
+    View Factor to Ground: autocalculate
+    Frame and Divider Name: null
+    Multiplier: 1
+    Number of Vertices: autocalculate
+    Vertices:
+      - {X: 10, Y: 24, Z: 2.8}
+      - {X: 10, Y: 24, Z: 0.9}
+      - {X: 6, Y: 24, Z: 0.9}
+      - {X: 6, Y: 24, Z: 2.8}
+
+Schedule:
+  ScheduleTypeLimits:
+    - Name: On/Off
+      Lower Limit Value: 0
+      Upper Limit Value: 1
+      Numeric Type: DISCRETE
+      Unit Type: Dimensionless
+    - Name: Temperature
+      Numeric Type: CONTINUOUS
+      Unit Type: Temperature
+  Schedule:Compact:
+    - Name: Always On
+      Schedule Type Limits Name: On/Off
+      Data:
+        - Through: "12/31"
+          Days:
+          - For: "AllDays"
+            Times:
+            - Until:
+                Time: "24:00"
+                Value: 1
+    - Name: Heating_Setpoint_Schedule
+      Schedule Type Limits Name: Temperature
+      Data:
+        - Through: "12/31"
+          Days:
+          - For: "AllDays"
+            Times:
+            - Until:
+                Time: "24:00"
+                Value: 20
+    - Name: Cooling_Setpoint_Schedule
+      Schedule Type Limits Name: Temperature
+      Data:
+        - Through: "12/31"
+          Days:
+          - For: "AllDays"
+            Times:
+            - Until:
+                Time: "24:00"
+                Value: 26
+
+HVAC:
+  HVACTemplate:Thermostat:
+    - Name: Ideal Loads Thermostat
+      Heating Setpoint Schedule Name: Heating_Setpoint_Schedule
+      Cooling Setpoint Schedule Name: Cooling_Setpoint_Schedule
+  HVACTemplate:Zone:IdealLoadsAirSystem:
+    - Zone Name: Perimeter_SW
+      Template Thermostat Name: Ideal Loads Thermostat
+      System Availability Schedule Name: Always On
+    - Zone Name: Perimeter_S
+      Template Thermostat Name: Ideal Loads Thermostat
+      System Availability Schedule Name: Always On
+    - Zone Name: Perimeter_SE
+      Template Thermostat Name: Ideal Loads Thermostat
+      System Availability Schedule Name: Always On
+    - Zone Name: Perimeter_W
+      Template Thermostat Name: Ideal Loads Thermostat
+      System Availability Schedule Name: Always On
+    - Zone Name: Core
+      Template Thermostat Name: Ideal Loads Thermostat
+      System Availability Schedule Name: Always On
+    - Zone Name: Perimeter_E
+      Template Thermostat Name: Ideal Loads Thermostat
+      System Availability Schedule Name: Always On
+    - Zone Name: Perimeter_NW
+      Template Thermostat Name: Ideal Loads Thermostat
+      System Availability Schedule Name: Always On
+    - Zone Name: Perimeter_N
+      Template Thermostat Name: Ideal Loads Thermostat
+      System Availability Schedule Name: Always On
+    - Zone Name: Perimeter_NE
+      Template Thermostat Name: Ideal Loads Thermostat
+      System Availability Schedule Name: Always On
+
+Output:VariableDictionary:
+    Key Field: regular
+Output:Diagnostics:
+    Key 1: DisplayExtraWarnings
+Output:Table:SummaryReports:
+    Report 1 Name: AllSummary
+OutputControl:Table:Style:
+    Column Separator: HTML
+Output:Variable:
+  - Key Value: "*"
+    Variable Name: Zone Mean Air Temperature
+    Reporting Frequency: Hourly
